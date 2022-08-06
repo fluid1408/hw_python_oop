@@ -79,7 +79,7 @@ class Running(Training):
         coeff_calorie_2 = 20
         """Тренировка: бег."""
         return (
-            coeff_calorie_1 * self.get_mean_speed() - coeff_calorie_2
+            (coeff_calorie_1 * self.get_mean_speed() - coeff_calorie_2)
             * self.weight / self.M_IN_KM * (self.duration * 60)
         )
 
