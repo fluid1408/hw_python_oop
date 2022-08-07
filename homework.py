@@ -41,9 +41,8 @@ class Training:
         return self.action * self.LEN_STEP / self.M_IN_KM
 
     def get_mean_speed(self) -> float:
-        mean_speed = self.get_distance() / self.duration
         """Получить среднюю скорость движения."""
-        return mean_speed
+        return self.get_distance() / self.duration
 
     def get_spent_calories(self) -> None:
         """Получить количество затраченных калорий."""
