@@ -18,12 +18,12 @@ class InfoMessage:
     def get_message(self) -> str:
         """Информационное сообщение о тренировке."""
         return self.MESSAGE.format(
-                self.training_type,
-                self.duration,
-                self.distance,
-                self.speed,
-                self.calories
-            )
+            self.training_type,
+            self.duration,
+            self.distance,
+            self.speed,
+            self.calories
+        )
 
 
 @dataclass
@@ -71,7 +71,7 @@ class Running(Training):
             (awerage_for_speed * self.get_mean_speed()
              - awerage_for_speed)
             * self.weight / self.M_IN_KM * (self.duration * self.M_IN_HR)
-           )
+        )
 
 
 @dataclass
@@ -108,8 +108,8 @@ class Swimming(Training):
     def get_spent_calories(self):
         spent_calories_swim = (
                     (self.get_mean_speed() + self.CALCULATION_OF_CALORIES_1)
-                    * self.CALCULATION_OF_CALORIES_2 * self.weight
-                    )
+                * self.CALCULATION_OF_CALORIES_2 * self.weight
+        )
         """Тренировка: плавание."""
         return spent_calories_swim
 
