@@ -107,8 +107,8 @@ class Swimming(Training):
 
     def get_spent_calories(self):
         spent_calories_swim = (
-                    (self.get_mean_speed() + self.CALCULATION_OF_CALORIES_1)
-                    * self.CALCULATION_OF_CALORIES_2 * self.weight
+            (self.get_mean_speed() + self.CALCULATION_OF_CALORIES_1)
+            * self.CALCULATION_OF_CALORIES_2 * self.weight
         )
         """Тренировка: плавание."""
         return spent_calories_swim
