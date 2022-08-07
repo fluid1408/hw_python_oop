@@ -1,4 +1,5 @@
 from dataclasses import dataclass, fields
+from typing import Dict, Sequence, Union
 
 
 @dataclass
@@ -119,7 +120,7 @@ TRAINING_CODES = {'SWM': (Swimming, len(fields(Swimming))),
                   }
 
 
-def read_package(workout_type: str, data: list) -> Training:
+def read_package(workout_type: str, data: Union[Dict, Sequence]) -> Training:
     """Прочитать данные полученные от датчиков."""
     if workout_type not in TRAINING_CODES:
         raise AttributeError(f'Передан неизвестный аргумент {workout_type}')
@@ -133,9 +134,8 @@ def read_package(workout_type: str, data: list) -> Training:
 
 
 def main(training: Training) -> None:
-    info = training.show_training_info()
     """Главная функция."""
-    print(info.get_message())
+    print(training.show_training_info().get_message())
 
 
 if __name__ == '__main__':
