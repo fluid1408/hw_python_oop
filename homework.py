@@ -61,14 +61,14 @@ class Training:
 @dataclass
 class Running(Training):
     """Тренировка: бег."""
-    HOUR_MULTIPLIER = 60
-    AVERAGE_FOR_SPEED_MULTIPLIER = 18
+    M_IN_HR = 60
 
     def get_spent_calories(self) -> float:
+        AVERAGE_FOR_SPEED_MULTIPLIER = 18
         awerage_for_speed = 20
         """Подсчёт расхода калорий для бега."""
         return (
-            (awerage_for_speed * self.get_mean_speed()
+            (AVERAGE_FOR_SPEED_MULTIPLIER * self.get_mean_speed()
              - awerage_for_speed)
             * self.weight / self.M_IN_KM * (self.duration * self.M_IN_HR)
         )
