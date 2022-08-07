@@ -82,10 +82,10 @@ class SportsWalking(Training):
         coeff_calorie_4 = 0.029
         """Получить количество затраченных калорий."""
         return (
-            coeff_calorie_3 * self.weight
-            + (self.get_mean_speed() ** 2 // self.height)
-            * coeff_calorie_4 * self.weight) * (self.duration * self.M_IN_KM
-                                                )
+            (coeff_calorie_3 * self.weight
+             + (self.get_mean_speed() ** 2 // self.height)
+             * coeff_calorie_4 * self.weight) * self.duration * self.M_IN_KM
+        )
 
 
 @dataclass
