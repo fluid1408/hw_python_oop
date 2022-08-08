@@ -61,14 +61,14 @@ class Training:
 @dataclass
 class Running(Training):
     """Тренировка: бег."""
+    SPEED_MULTIPLIER = 18
+    SPEED_SHIFT = 20
 
     def get_spent_calories(self) -> float:
-        SPEED_MULTIPLIER_2 = 18
-        SPEED_MULTIPLIER_1 = 20
         """Подсчёт расхода калорий для бега."""
         return (
-            (SPEED_MULTIPLIER_2 * self.get_mean_speed()
-             - SPEED_MULTIPLIER_1)
+            (self.SPEED_MULTIPLIER * self.get_mean_speed()
+             - self.SPEED_SHIFT)
             * self.weight / self.M_IN_KM * (self.duration * self.M_IN_HR)
         )
 
@@ -76,15 +76,15 @@ class Running(Training):
 @dataclass
 class SportsWalking(Training):
     height: float
+    WEIGHT_MULTIPLIER_1 = 0.035
+    WEIGHT_MULTIPLIER_2 = 0.029
 
     def get_spent_calories(self) -> float:
-        WEIGHT_MULTIPLIER_1 = 0.035
-        WEIGHT_MULTIPLIER_2 = 0.029
         """Получить количество затраченных калорий."""
         return (
-            (WEIGHT_MULTIPLIER_1 * self.weight
+            (self.WEIGHT_MULTIPLIER_1 * self.weight
              + (self.get_mean_speed() ** 2 // self.height)
-             * WEIGHT_MULTIPLIER_2 * self.weight)
+             * self.WEIGHT_MULTIPLIER_2 * self.weight)
             * (self.duration * self.M_IN_HR)
         )
 
@@ -95,8 +95,8 @@ class Swimming(Training):
     length_pool: float
     count_pool: int
     LEN_STEP = 1.38
-    SPEED_SHIFT = 1.1
-    AWERAGE_SPEED_MULTIPLIER = 2
+    SPEED_SHIFT_1 = 1.1
+    SPEED_MULTIPLIER = 2
 
     def get_mean_speed(self) -> float:
         return (
@@ -105,33 +105,35 @@ class Swimming(Training):
         )
 
     def get_spent_calories(self):
-        spent_calories_swim = (
-            (self.get_mean_speed() + self.SPEED_SHIFT)
-            * self.AWERAGE_SPEED_MULTIPLIER * self.weight
-        )
         """Тренировка: плавание."""
-        return spent_calories_swim
+        return (
+            (self.get_mean_speed()
+             + self.SPEED_SHIFT_1)
+            * self.SPEED_MULTIPLIER
+            * self.weight
+        )
 
 
-TRAINING_CODES = {'SWM': (Swimming, len(fields(Swimming))),
-                  'RUN': (Running, len(fields(Running))),
-                  'WLK': (SportsWalking, len(fields(SportsWalking)))
-                  }
+TRAINING = {'SWM': (Swimming, len(fields(Swimming))),
+            'RUN': (Running, len(fields(Running))),
+            'WLK': (SportsWalking, len(fields(SportsWalking)))
+            }
+UNKNOWN_ARGUMENT = ('Передан неизвестный аргумент {}')
+INCORRECT_NUMBER_OF_VALUES = ('Неверное количество передаваемых значений'
+                              'для класса {}.'
+                              'Было принято {},'
+                              ' а нужно {}')
 
 
 def read_package(workout_type: str, data: Union[Dict, Sequence]) -> Training:
     """Прочитать данные полученные от датчиков."""
-    UNKNOWN_ARGUMENT = ('Передан неизвестный аргумент {}')
-    INCORRECT_NUMBER_OF_VALUES = ('Неверное количество передаваемых значений'
-                                  'для класса {}.'
-                                  'Было принято {},'
-                                  ' а нужно {}')
-    if workout_type not in TRAINING_CODES:
-        raise AttributeError(UNKNOWN_ARGUMENT.format({workout_type}))
-    training, number_of_fields = TRAINING_CODES[workout_type]
+
+    if workout_type not in TRAINING:
+        raise ValueError(UNKNOWN_ARGUMENT.format(workout_type))
+    training, number_of_fields = TRAINING[workout_type]
     if number_of_fields != len(data):
-        raise AttributeError(INCORRECT_NUMBER_OF_VALUES.format(
-                             {workout_type}, len(data), number_of_fields))
+        raise ValueError(INCORRECT_NUMBER_OF_VALUES.format(workout_type,
+                         len(data), number_of_fields))
     return training(*data)
 
 
